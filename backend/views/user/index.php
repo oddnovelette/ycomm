@@ -25,7 +25,29 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filterModel' => $searchModel,
                 'columns' => [
                     'id',
-                    'username',
+                    [
+                        'attribute' => 'created_at',
+                        'filter' => \kartik\widgets\DatePicker::widget([
+                            'model' => $searchModel,
+                            'attribute' => 'date_start',
+                            'attribute2' => 'date_end',
+                            'type' => \kartik\widgets\DatePicker::TYPE_RANGE,
+                            'separator' => '-',
+                            'pluginOptions' => [
+                                'todayHighlight' => true,
+                                'autoclose' => true,
+                                'format' => 'yyyy-mm-dd',
+                            ],
+                        ]),
+                        'format' => 'datetime',
+                    ],
+                    [
+                        'attribute' => 'username',
+                        'value' => function (\application\models\User $model) {
+                            return Html::a(Html::encode($model->username), ['view', 'id' => $model->id]);
+                        },
+                        'format' => 'raw',
+                    ],
                     'email:email',
                     [
                         'attribute' => 'status',

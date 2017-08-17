@@ -11,14 +11,15 @@ use application\models\User;
  */
 class UserForm extends User
 {
-    /**
-     * @inheritdoc
-     */
+    public $date_start;
+    public $date_end;
+
     public function rules() : array
     {
         return [
             [['id', 'status', 'created_at'], 'integer'],
             [['username', 'email'], 'safe'],
+            [['date_start', 'date_end'], 'date', 'format' => 'php:Y-m-d'],
         ];
     }
 
@@ -54,7 +55,10 @@ class UserForm extends User
         ]);
 
         $query->andFilterWhere(['like', 'username', $this->username])
-              ->andFilterWhere(['like', 'email', $this->email]);
+              ->andFilterWhere(['like', 'email', $this->email])
+              ->andFilterWhere(['>=', 'created_at', $this->date_start ? strtotime($this->date_start . ' 00:00:00') : null])
+              ->andFilterWhere(['<=', 'created_at', $this->date_end ? strtotime($this->date_end . ' 23:59:59') : null]);
+
         return $dataProvider;
     }
 }
