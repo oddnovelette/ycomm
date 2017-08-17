@@ -41,10 +41,10 @@ AppAsset::register($this);
         ['label' => 'Feedback', 'url' => ['/feedback/index']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/auth/signup/request']];
+        $menuItems[] = ['label' => 'Register', 'url' => ['/auth/signup/request']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/auth/auth/login']];
     } else {
-        $menuItems[] = ['account' => 'Register', 'url' => ['/auth/signup/request']];
+        $menuItems[] = ['label' => 'Account', 'url' => ['/account/main/index']];
         $menuItems[] = '<li>'
             . Html::beginForm(['/auth/auth/logout'], 'post')
             . Html::submitButton(

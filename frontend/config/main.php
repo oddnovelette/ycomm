@@ -9,11 +9,11 @@ $params = array_merge(
 return [
     'id' => 'application-frontend',
     'basePath' => dirname(__DIR__),
+    'controllerNamespace' => 'frontend\controllers',
     'bootstrap' => [
         'log',
-        'common\bootstrap\Initialize',
+        'common\bootstrap\Container'
     ],
-    'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',

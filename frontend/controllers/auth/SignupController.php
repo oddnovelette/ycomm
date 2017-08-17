@@ -2,6 +2,7 @@
 namespace frontend\controllers\auth;
 
 use Yii;
+use yii\base\Module;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use application\services\SignupService;
@@ -11,7 +12,13 @@ class SignupController extends Controller
 {
     private $service;
 
-    public function __construct($id, $module, SignupService $service, $config = [])
+    public function __construct
+        (
+            string $id,
+            Module $module,
+            SignupService $service,
+            array $config = null
+        )
     {
         parent::__construct($id, $module, $config);
         $this->service = $service;

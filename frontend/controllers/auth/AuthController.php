@@ -3,6 +3,7 @@ namespace frontend\controllers\auth;
 
 use application\services\AuthService;
 use Yii;
+use yii\base\Module;
 use yii\web\Controller;
 use application\forms\LoginForm;
 
@@ -10,7 +11,13 @@ class AuthController extends Controller
 {
     private $service;
 
-    public function __construct($id, $module, AuthService $service, $config = [])
+    public function __construct
+        (
+            string $id,
+            Module $module,
+            AuthService $service,
+            array $config = null
+        )
     {
         parent::__construct($id, $module, $config);
         $this->service = $service;

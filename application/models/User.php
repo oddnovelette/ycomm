@@ -6,6 +6,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\{ActiveQuery, ActiveRecord};
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
@@ -40,7 +41,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user->email = $email;
         $user->setPassword($password);
         $user->created_at = time();
-        $user->status = self::STATUS_AWAIT;
+        $user->status = self::STATUS_AWAIT; // for consideration
         $user->newConfirmToken();
         $user->generateAuthKey();
         return $user;
@@ -264,5 +265,17 @@ class User extends ActiveRecord implements IdentityInterface
     public function transactions() : array
     {
         return [self::SCENARIO_DEFAULT => self::OP_ALL];
+    }
+
+    public static function getNamedStatus() : array
+    {
+        return [
+            User::STATUS_AWAIT => 'User waiting',
+            User::STATUS_ACTIVE => 'Active user'
+        ];
+    }
+    public static function getStatus($status) : string
+    {
+        return ArrayHelper::getValue(self::getNamedStatus(), $status);
     }
 }

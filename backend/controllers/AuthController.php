@@ -3,6 +3,7 @@ namespace backend\controllers;
 
 use application\services\AuthService;
 use Yii;
+use yii\base\Module;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use application\forms\LoginForm;
@@ -10,15 +11,23 @@ use application\forms\LoginForm;
 class AuthController extends Controller
 {
     private $authService;
-    public function __construct($id, $module, AuthService $service, $config = [])
+
+    public function __construct
+        (
+            string $id,
+            Module $module,
+            AuthService $service,
+            array $config = null
+        )
     {
         parent::__construct($id, $module, $config);
         $this->authService = $service;
     }
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
+    public function behaviors() : array
     {
         return [
             'verbs' => [
@@ -49,9 +58,7 @@ class AuthController extends Controller
                 Yii::$app->session->setFlash('error', $e->getMessage());
             }
         }
-        return $this->render('login', [
-            'model' => $form,
-        ]);
+        return $this->render('login', ['model' => $form]);
     }
     /**
      * @return mixed

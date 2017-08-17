@@ -55,7 +55,7 @@ if (!in_array($envName, $envNames)) {
 $env = $envs[$envName];
 
 if (empty($params['env'])) {
-    echo "\n  Initialize the application under '{$envNames[$answer]}' environment? [yes|no] ";
+    echo "\n  Container the application under '{$envNames[$answer]}' environment? [yes|no] ";
     $answer = trim(fgets(STDIN));
     if (strncasecmp($answer, 'y', 1)) {
         echo "\n  Quit initialization.\n";

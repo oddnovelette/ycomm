@@ -7,7 +7,7 @@ use yii\base\BootstrapInterface;
 use yii\di\Instance;
 use yii\mail\MailerInterface;
 
-class Initialize implements BootstrapInterface
+class Container implements BootstrapInterface
 {
     public function bootstrap($app) : void
     {
