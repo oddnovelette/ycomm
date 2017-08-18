@@ -29,6 +29,14 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 10;
 
     /**
+     * @inheritdoc
+     */
+    public static function tableName() : string
+    {
+        return '{{%users}}';
+    }
+
+    /**
      * @param string $username
      * @param string $email
      * @param string $password
@@ -47,6 +55,12 @@ class User extends ActiveRecord implements IdentityInterface
         return $user;
     }
 
+    /**
+     * @param string $username
+     * @param string $email
+     * @param string $password
+     * @return User
+     */
     public static function manualCreate(string $username, string $email, string $password) : self
     {
         $user = new self();
@@ -59,6 +73,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $user;
     }
 
+    /**
+     * @param string $username
+     * @param string $email
+     * @return void
+     */
     public function edit(string $username, string $email) : void
     {
         $this->username = $username;
@@ -66,6 +85,9 @@ class User extends ActiveRecord implements IdentityInterface
         $this->updated_at = time();
     }
 
+    /**
+     * @return void
+     */
     public function signupConfirmation() : void
     {
         if (!$this->isAwait()) throw new \DomainException('User confirmed');
@@ -88,6 +110,9 @@ class User extends ActiveRecord implements IdentityInterface
         return $user;
     }
 
+    /**
+     * @return void
+     */
     public function requestPasswordReset() : void
     {
         if (!empty($this->password_reset_token) && self::isPasswordResetTokenValid($this->password_reset_token)) {
@@ -120,6 +145,9 @@ class User extends ActiveRecord implements IdentityInterface
         $this->clearResetToken();
     }
 
+    /**
+     * @return bool
+     */
     public function isActive() : bool
     {
         return $this->status === self::STATUS_ACTIVE;
@@ -130,18 +158,6 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->status === self::STATUS_AWAIT;
     }
 
-
-    /**
-     * @inheritdoc
-     */
-    public static function tableName() : string
-    {
-        return '{{%users}}';
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function behaviors() : array
     {
         return [
@@ -153,9 +169,6 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules() : array
     {
         return [
@@ -163,17 +176,11 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public static function findIdentity($id)
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public static function findIdentityByAccessToken($token, $type = null)
     {
         throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
@@ -228,9 +235,6 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->getPrimaryKey();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getAuthKey() : string
     {
         return $this->auth_key;
@@ -241,9 +245,6 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(Social::className(), ['user_id' => 'id']);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function validateAuthKey($authKey) : string
     {
         return $this->getAuthKey() === $authKey;
@@ -293,6 +294,11 @@ class User extends ActiveRecord implements IdentityInterface
             User::STATUS_ACTIVE => 'Active user'
         ];
     }
+
+    /**
+     * @param $status
+     * @return string
+     */
     public static function getStatus($status) : string
     {
         return ArrayHelper::getValue(self::getNamedStatus(), $status);
