@@ -2,11 +2,13 @@
 
 namespace backend\controllers;
 
+use application\forms\Users\{UserCreateForm, UserEditForm};
+use application\services\UserService;
 use Yii;
 use application\models\User;
 use backend\forms\UserForm;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\base\Module;
+use yii\web\{Controller, NotFoundHttpException};
 use yii\filters\VerbFilter;
 
 /**
@@ -14,10 +16,24 @@ use yii\filters\VerbFilter;
  */
 class UserController extends Controller
 {
+    private $userService;
+
+    public function __construct
+        (
+            string $id,
+            Module $module,
+            UserService $userService,
+            array $config = null
+        )
+    {
+        parent::__construct($id, $module, $config);
+        $this->userService = $userService;
+    }
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
+    public function behaviors() : array
     {
         return [
             'verbs' => [
@@ -63,15 +79,19 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $model = new User();
+        $form = new UserCreateForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $user = $this->userService->create($form);
+                Yii::$app->session->setFlash('success', 'Successfully created');
+                return $this->redirect(['view', 'id' => $user->id]);
+            } catch (\DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
         }
+        return $this->render('create', ['model' => $form]);
     }
 
     /**
@@ -80,17 +100,24 @@ class UserController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        $user = $this->findModel($id);
+        $form = new UserEditForm($user);
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $this->userService->edit($user->id, $form);
+                Yii::$app->session->setFlash('success', 'Successfully updated');
+                return $this->redirect(['view', 'id' => $user->id]);
+            } catch (\DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
         }
+        return $this->render('update', [
+            'model' => $form,
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -99,10 +126,10 @@ class UserController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id)
     {
         $this->findModel($id)->delete();
-
+        Yii::$app->session->setFlash('success', 'Successfully deleted');
         return $this->redirect(['index']);
     }
 
@@ -117,8 +144,7 @@ class UserController extends Controller
     {
         if (($model = User::findOne($id)) !== null) {
             return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
         }
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

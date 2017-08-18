@@ -26,13 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns' => [
                     'id',
                     [
+                        'label' => 'By date added',
                         'attribute' => 'created_at',
                         'filter' => \kartik\widgets\DatePicker::widget([
                             'model' => $searchModel,
                             'attribute' => 'date_start',
                             'attribute2' => 'date_end',
                             'type' => \kartik\widgets\DatePicker::TYPE_RANGE,
-                            'separator' => '-',
+                            'separator' => 'to',
                             'pluginOptions' => [
                                 'todayHighlight' => true,
                                 'autoclose' => true,

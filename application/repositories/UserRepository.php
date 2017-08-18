@@ -40,6 +40,11 @@ class UserRepository
         if (!$user->save()) throw new \RuntimeException('Saving fault');
     }
 
+    public function get(int $id) : User
+    {
+        return $this->getBy(['id' => $id]);
+    }
+
     private function getBy(array $checktype) : User
     {
         if (!$user = User::find()->andWhere($checktype)->limit(1)->one()) {

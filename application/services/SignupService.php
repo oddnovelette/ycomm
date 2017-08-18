@@ -10,18 +10,18 @@ use yii\mail\MailerInterface;
 class SignupService
 {
     private $mailer;
-    private $users;
+    private $userRepository;
 
-    public function __construct(MailerInterface $mailer, UserRepository $users)
+    public function __construct(MailerInterface $mailer, UserRepository $userRepository)
     {
         $this->mailer = $mailer;
-        $this->users = $users;
+        $this->userRepository = $userRepository;
     }
 
     public function signup(SignupForm $form) : void
     {
         $user = User::signup($form->username, $form->email, $form->password);
-        $this->users->save($user);
+        $this->userRepository->save($user);
 
         $send = $this->mailer->compose(
             ['html' => 'auth/signup/confirm-html', 'text' => 'auth/signup/confirm-text'],
@@ -37,9 +37,9 @@ class SignupService
     public function confirm(string $token) : void
     {
         if (empty($token)) throw new \DomainException('Empty confirm token');
-        $user = $this->users->getByEmailConfirmToken($token);
+        $user = $this->userRepository->getByEmailConfirmToken($token);
         $user->signupConfirmation();
-        $this->users->save($user);
+        $this->userRepository->save($user);
     }
 
 }

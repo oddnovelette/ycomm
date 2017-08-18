@@ -47,6 +47,25 @@ class User extends ActiveRecord implements IdentityInterface
         return $user;
     }
 
+    public static function manualCreate(string $username, string $email, string $password) : self
+    {
+        $user = new self();
+        $user->username = $username;
+        $user->email = $email;
+        $user->password = $password;
+        $user->created_at = time();
+        $user->status = self::STATUS_ACTIVE;
+        $user->generateAuthKey();
+        return $user;
+    }
+
+    public function edit(string $username, string $email) : void
+    {
+        $this->username = $username;
+        $this->email = $email;
+        $this->updated_at = time();
+    }
+
     public function signupConfirmation() : void
     {
         if (!$this->isAwait()) throw new \DomainException('User confirmed');
