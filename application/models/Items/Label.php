@@ -17,16 +17,28 @@ use yii\helpers\Json;
  * @property string $name
  * @property string $slug
  * @property Meta $meta
+ *
+ * Class Label
+ * @package application\models\Items
  */
 class Label extends ActiveRecord
 {
     public $meta = null;
 
+    /**
+     * @return string
+     */
     public static function tableName() : string
     {
         return '{{%item_labels}}';
     }
 
+    /**
+     * @param string $name
+     * @param string $slug
+     * @param Meta $meta
+     * @return Label
+     */
     public static function create(string $name, string $slug, Meta $meta) : self
     {
         $brand = new self();
@@ -35,13 +47,23 @@ class Label extends ActiveRecord
         $brand->meta = $meta;
         return $brand;
     }
-    public function edit($name, $slug, Meta $meta) : void
+
+    /**
+     * @param string $name
+     * @param string $slug
+     * @param Meta $meta
+     */
+    public function edit(string $name, string $slug, Meta $meta) : void
     {
         $this->name = $name;
         $this->slug = $slug;
         $this->meta = $meta;
     }
 
+    /**
+     * @param bool $insert
+     * @return bool
+     */
     public function beforeSave($insert) : bool
     {
         $this->setAttribute('meta_json', Json::encode([
