@@ -4,6 +4,7 @@ namespace application\services\Items;
 use application\models\Items\Tag;
 use application\forms\Items\TagForm;
 use application\repositories\TagRepository;
+use yii\helpers\Inflector;
 
 /**
  * Class TagService
@@ -23,17 +24,21 @@ class TagService
     }
 
     /**
+     * Creates tags with auto-slug
+     *
      * @param TagForm $form
      * @return Tag
      */
     public function create(TagForm $form) : Tag
     {
-        $tag = Tag::create($form->name, $form->slug);
+        $tag = Tag::create($form->name, $form->slug ?: Inflector::slug($form->name));
         $this->tagRepository->save($tag);
         return $tag;
     }
 
     /**
+     * Edit tags with auto-slug
+     *
      * @param int $id
      * @param TagForm $form
      * @return void
@@ -41,7 +46,7 @@ class TagService
     public function edit(int $id, TagForm $form) : void
     {
         $tag = $this->tagRepository->get($id);
-        $tag->edit($form->name, $form->slug);
+        $tag->edit($form->name, $form->slug ?: Inflector::slug($form->name));
         $this->tagRepository->save($tag);
     }
 
