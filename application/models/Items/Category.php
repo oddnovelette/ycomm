@@ -9,7 +9,6 @@
 namespace application\models\Items;
 
 use paulzi\nestedsets\NestedSetsBehavior;
-use application\models\Items\Meta;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\Json;
