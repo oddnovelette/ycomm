@@ -8,41 +8,71 @@
 
 namespace application\services\Items;
 
-
 use application\forms\Items\OverviewEditForm;
 use application\repositories\ItemRepository;
 
+/**
+ * Class OverviewService
+ * @package application\services\Items
+ */
 class OverviewService
 {
+    /**
+     * @var ItemRepository
+     */
     private $itemRepository;
 
+    /**
+     * OverviewService constructor.
+     * @param ItemRepository $itemRepository
+     */
     public function __construct(ItemRepository $itemRepository)
     {
         $this->itemRepository = $itemRepository;
     }
 
-    public function edit($id, $reviewId, OverviewEditForm $form) : void
+    /**
+     * @param int $id
+     * @param int $reviewId
+     * @param OverviewEditForm $form
+     */
+    public function edit(int $id, int $reviewId, OverviewEditForm $form) : void
     {
         $item = $this->itemRepository->get($id);
         $item->editOverview($reviewId, $form->vote, $form->text);
         $this->itemRepository->save($item);
     }
 
-    public function accept($id, $reviewId) : void
+    /**
+     * @param int $id
+     * @param int $reviewId
+     * @return void
+     */
+    public function accept(int $id, int $reviewId) : void
     {
         $item = $this->itemRepository->get($id);
         $item->acceptOverview($reviewId);
         $this->itemRepository->save($item);
     }
 
-    public function decline($id, $reviewId) : void
+    /**
+     * @param int $id
+     * @param int $reviewId
+     * @return void
+     */
+    public function decline(int $id, int $reviewId) : void
     {
         $item = $this->itemRepository->get($id);
         $item->declineOverview($reviewId);
         $this->itemRepository->save($item);
     }
 
-    public function delete($id, $reviewId) : void
+    /**
+     * @param int $id
+     * @param int $reviewId
+     * @return void
+     */
+    public function delete(int $id, int $reviewId) : void
     {
         $item = $this->itemRepository->get($id);
         $item->deleteOverview($reviewId);

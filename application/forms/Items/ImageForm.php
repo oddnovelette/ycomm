@@ -11,6 +11,10 @@ namespace application\forms\Items;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
+/**
+ * Class ImageForm
+ * @package application\forms\Items
+ */
 class ImageForm extends Model
 {
     /**
@@ -18,6 +22,9 @@ class ImageForm extends Model
      */
     public $files;
 
+    /**
+     * @return array
+     */
     public function rules() : array
     {
         return [

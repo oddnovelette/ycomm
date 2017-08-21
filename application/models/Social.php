@@ -10,8 +10,18 @@ namespace application\models;
 use yii\db\ActiveRecord;
 use yii\web\BadRequestHttpException;
 
+/**
+ * Class Social
+ * @package application\models
+ */
 class Social extends ActiveRecord
 {
+    /**
+     * @param string $social
+     * @param string $identity
+     * @return Social
+     * @throws BadRequestHttpException
+     */
     public static function create(string $social, string $identity) : self
     {
         if (empty($social) || empty($identity)) {

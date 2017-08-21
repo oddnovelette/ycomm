@@ -21,6 +21,11 @@ class CategoriesForm extends Model
     public $main;
     public $others = [];
 
+    /**
+     * CategoriesForm constructor.
+     * @param Item|null $item
+     * @param array|null $config
+     */
     public function __construct(Item $item = null, array $config = null)
     {
         if ($item) {

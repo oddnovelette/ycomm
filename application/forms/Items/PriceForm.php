@@ -7,6 +7,7 @@
  */
 
 namespace application\forms\Items;
+
 use application\forms\MetatagsForm;
 use application\models\Items\Item;
 use yii\base\Model;
@@ -25,6 +26,11 @@ class PriceForm extends Model
     public $old;
     public $new;
 
+    /**
+     * PriceForm constructor.
+     * @param Item|null $item
+     * @param array|null $config
+     */
     public function __construct(Item $item = null, array $config = null)
     {
         if ($item) {

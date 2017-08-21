@@ -8,16 +8,24 @@
 
 namespace application\forms\Items;
 
-
 use application\models\Items\Item;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class TagsForm
+ * @package application\forms\Items
+ */
 class TagsForm extends Model
 {
     public $existing = [];
     public $textNew;
 
+    /**
+     * TagsForm constructor.
+     * @param Item|null $item
+     * @param array|null $config
+     */
     public function __construct(Item $item = null, array $config = null)
     {
         if ($item) {

@@ -5,7 +5,8 @@ namespace application\forms;
 use yii\base\Model;
 
 /**
- * Contact is the model behind the feedback form.
+ * Class FeedbackForm
+ * @package application\forms
  */
 class FeedbackForm extends Model
 {
@@ -15,26 +16,16 @@ class FeedbackForm extends Model
     public $body;
     public $verifyCode;
 
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
+    public function rules() : array
     {
         return [
-            // name, email, subject and body are required
             [['name', 'email', 'subject', 'body'], 'required'],
-            // email has to be a valid email address
             ['email', 'email'],
-            // verifyCode needs to be entered correctly
             ['verifyCode', 'captcha'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
+    public function attributeLabels() : array
     {
         return [
             'verifyCode' => 'Verification Code',

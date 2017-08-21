@@ -12,15 +12,30 @@ use application\forms\Items\ParametersForm;
 use application\models\Items\Parameter;
 use application\repositories\ParameterRepository;
 
+/**
+ * Class ParameterService
+ * @package application\services\Items
+ */
 class ParameterService
 {
+    /**
+     * @var ParameterRepository
+     */
     private $parameterRepository;
 
+    /**
+     * ParameterService constructor.
+     * @param ParameterRepository $parameterRepository
+     */
     public function __construct(ParameterRepository $parameterRepository)
     {
         $this->parameterRepository = $parameterRepository;
     }
 
+    /**
+     * @param ParametersForm $form
+     * @return Parameter
+     */
     public function create(ParametersForm $form) : Parameter
     {
         $parameter = Parameter::create(
@@ -35,7 +50,12 @@ class ParameterService
         return $parameter;
     }
 
-    public function edit($id, ParametersForm $form) : void
+    /**
+     * @param int $id
+     * @param ParametersForm $form
+     * @return void
+     */
+    public function edit(int $id, ParametersForm $form) : void
     {
         $parameter = $this->parameterRepository->get($id);
         $parameter->edit(
@@ -49,7 +69,11 @@ class ParameterService
         $this->parameterRepository->save($parameter);
     }
 
-    public function remove($id) : void
+    /**
+     * @param int $id
+     * @return void
+     */
+    public function remove(int $id) : void
     {
         $parameter = $this->parameterRepository->get($id);
         $this->parameterRepository->remove($parameter);

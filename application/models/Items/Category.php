@@ -65,6 +65,13 @@ class Category extends ActiveRecord
         return $category;
     }
 
+    /**
+     * @param string $name
+     * @param string $slug
+     * @param string $title
+     * @param string $description
+     * @param Meta $meta
+     */
     public function edit
     (
         string $name,

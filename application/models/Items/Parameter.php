@@ -37,6 +37,15 @@ class Parameter extends ActiveRecord
         return '{{%item_parameters}}';
     }
 
+    /**
+     * @param string $name
+     * @param string $type
+     * @param string $required
+     * @param string $default
+     * @param array $variants
+     * @param int $sort
+     * @return Parameter
+     */
     public static function create(string $name, string $type, string $required, string $default, array $variants, int $sort) : self
     {
         $object = new self();
@@ -49,6 +58,14 @@ class Parameter extends ActiveRecord
         return $object;
     }
 
+    /**
+     * @param string $name
+     * @param string $type
+     * @param string $required
+     * @param string $default
+     * @param array $variants
+     * @param int $sort
+     */
     public function edit(string $name, string $type, string $required, string $default, array $variants, int $sort) : void
     {
         $this->name = $name;
@@ -79,12 +96,17 @@ class Parameter extends ActiveRecord
         return count($this->variants) > 0;
     }
 
-    public function afterFind(): void
+    public function afterFind() : void
     {
         $this->variants = Json::decode($this->getAttribute('variants_json'));
         parent::afterFind();
     }
-    public function beforeSave($insert): bool
+
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert) : bool
     {
         $this->setAttribute('variants_json', Json::encode($this->variants));
         return parent::beforeSave($insert);

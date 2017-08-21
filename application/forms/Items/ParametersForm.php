@@ -8,10 +8,13 @@
 
 namespace application\forms\Items;
 
-
 use application\models\Items\Parameter;
 use yii\base\Model;
 
+/**
+ * Class ParametersForm
+ * @package application\forms\Items
+ */
 class ParametersForm extends Model
 {
     public $name;
@@ -23,6 +26,11 @@ class ParametersForm extends Model
 
     private $_parameter;
 
+    /**
+     * ParametersForm constructor.
+     * @param Parameter|null $parameter
+     * @param array|null $config
+     */
     public function __construct(Parameter $parameter = null, array $config = null)
     {
         if ($parameter) {
