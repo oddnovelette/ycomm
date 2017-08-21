@@ -341,6 +341,10 @@ class Item extends ActiveRecord
         throw new \DomainException('Overview not found.');
     }
 
+    /**
+     * @param array $overviews
+     * @return void
+     */
     private function updateOverviews(array $overviews) : void
     {
         $amount = 0;

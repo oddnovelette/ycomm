@@ -8,10 +8,21 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use application\forms\LoginForm;
 
+/**
+ * Class AuthController
+ * @package backend\controllers
+ */
 class AuthController extends Controller
 {
     private $authService;
 
+    /**
+     * AuthController constructor.
+     * @param string $id
+     * @param Module $module
+     * @param AuthService $service
+     * @param array|null $config
+     */
     public function __construct
         (
             string $id,
@@ -51,7 +62,7 @@ class AuthController extends Controller
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
                 $user = $this->authService->auth($form);
-                Yii::$app->user->login($user, $form->rememberMe ? 3600 * 24 * 30 : 0);
+                Yii::$app->user->login($user, $form->rememberMe ? Yii::$app->params['rememberTime'] : 0);
                 return $this->goBack();
             } catch (\DomainException $e) {
                 Yii::$app->errorHandler->logException($e);

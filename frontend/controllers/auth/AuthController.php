@@ -7,10 +7,21 @@ use yii\base\Module;
 use yii\web\Controller;
 use application\forms\LoginForm;
 
+/**
+ * Class AuthController
+ * @package frontend\controllers\auth
+ */
 class AuthController extends Controller
 {
     private $service;
 
+    /**
+     * AuthController constructor.
+     * @param string $id
+     * @param Module $module
+     * @param AuthService $service
+     * @param array|null $config
+     */
     public function __construct
         (
             string $id,
@@ -36,7 +47,7 @@ class AuthController extends Controller
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
                 $user = $this->service->auth($form);
-                Yii::$app->user->login($user, $form->rememberMe ? 3600 * 24 * 30 : 0);
+                Yii::$app->user->login($user, $form->rememberMe ? Yii::$app->params['rememberTime'] : 0);
                 return $this->goBack();
             } catch (\DomainException $e) {
                 Yii::$app->errorHandler->logException($e);
@@ -44,9 +55,7 @@ class AuthController extends Controller
             }
         }
 
-        return $this->render('login', [
-            'model' => $form,
-        ]);
+        return $this->render('login', ['model' => $form]);
     }
 
     /**
@@ -55,7 +64,6 @@ class AuthController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
         return $this->goHome();
     }
 }

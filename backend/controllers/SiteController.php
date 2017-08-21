@@ -1,8 +1,10 @@
 <?php
 namespace backend\controllers;
 use yii\web\Controller;
+
 /**
- * Site controller
+ * Class SiteController
+ * @package backend\controllers
  */
 class SiteController extends Controller
 {
