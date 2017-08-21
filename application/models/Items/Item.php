@@ -354,4 +354,88 @@ class Item extends ActiveRecord
         $this->overviews = $overviews;
         $this->rating = $amount ? $total / $amount : null;
     }
+
+
+    ########### Item Attachments ##############################
+
+    public function getLabel() : ActiveQuery
+    {
+        return $this->hasOne(Label::class, ['id' => 'label_id']);
+    }
+    public function getCategory() : ActiveQuery
+    {
+        return $this->hasOne(Category::class, ['id' => 'category_id']);
+    }
+    public function getCategoryAttachments() : ActiveQuery
+    {
+        return $this->hasMany(CategoryAttachment::class, ['item_id' => 'id']);
+    }
+    public function getTagAttachments() : ActiveQuery
+    {
+        return $this->hasMany(TagAttachment::class, ['item_id' => 'id']);
+    }
+    public function getParameterValues() : ActiveQuery
+    {
+        return $this->hasMany(ParameterValue::class, ['item_id' => 'id']);
+    }
+    public function getImages() : ActiveQuery
+    {
+        return $this->hasMany(Image::class, ['item_id' => 'id'])->orderBy('sort');
+    }
+    public function getRelatedAttachments() : ActiveQuery
+    {
+        return $this->hasMany(RelatedAttachment::class, ['item_id' => 'id']);
+    }
+    public function getOverviews() : ActiveQuery
+    {
+        return $this->hasMany(Overwiev::class, ['item_id' => 'id']);
+    }
+    #######################################################
+
+    public static function tableName() : string
+    {
+        return '{{%app_items}}';
+    }
+
+    public function behaviors() : array
+    {
+        return [
+            [
+                'class' => SaveRelationsBehavior::className(),
+                'relations' => ['categoryAttachments', 'tagAttachments', 'relatedAttachments', 'values', 'images', 'overviews'],
+            ],
+        ];
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert) : bool
+    {
+        $this->setAttribute('meta_json', Json::encode([
+            'title' => $this->meta->title,
+            'description' => $this->meta->description,
+            'keywords' => $this->meta->keywords
+        ]));
+        return parent::beforeSave($insert);
+    }
+
+    public function afterFind() : void
+    {
+        $meta = Json::decode($this->getAttribute('meta_json'));
+        $this->meta = new Meta(
+            $meta['title'] ?? null,
+            $meta['description'] ?? null,
+            $meta['keywords'] ?? null
+        );
+        parent::afterFind();
+    }
+
+    public function transactions() : array
+    {
+        return [
+            self::SCENARIO_DEFAULT => self::OP_ALL,
+        ];
+    }
 }
