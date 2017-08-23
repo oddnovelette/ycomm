@@ -11,7 +11,7 @@ use application\models\Items\Tag;
 use yii\base\Model;
 
 /**
- * Class TagForm
+ * Class TagSearch
  * @package application\forms\Items
  */
 class TagForm extends Model
@@ -25,11 +25,11 @@ class TagForm extends Model
     private $_tag;
 
     /**
-     * TagForm constructor.
-     * @param Tag $tag
+     * TagSearch constructor.
+     * @param Tag|null $tag
      * @param array|null $config
      */
-    public function __construct(Tag $tag, array $config = null)
+    public function __construct(Tag $tag = null, array $config = null)
     {
         if ($tag) {
             $this->name = $tag->name;

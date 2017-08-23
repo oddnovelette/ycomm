@@ -2,21 +2,21 @@
 /**
  * Created by PhpStorm.
  * User: odd
- * Date: 22.08.2017
- * Time: 01:00
+ * Date: 23.08.2017
+ * Time: 04:26
  */
 
 namespace backend\forms;
 
-use application\models\Items\Label;
+use application\models\Items\Tag;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * Class LabelSearch
- * @package forms
+ * Class TagSearch
+ * @package backend\forms
  */
-class LabelSearch extends Model
+class TagSearch extends Model
 {
     public $id;
     public $name;
@@ -36,12 +36,11 @@ class LabelSearch extends Model
      */
     public function search(array $params) : ActiveDataProvider
     {
-        $query = Label::find();
+        $query = Tag::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => ['defaultOrder' => ['name' => SORT_ASC]]
         ]);
-
         $this->load($params);
         if (!$this->validate()) {
             $query->where('0=1');
