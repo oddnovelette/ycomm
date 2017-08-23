@@ -11,6 +11,7 @@ namespace application\forms\Items;
 use application\forms\MetatagsForm;
 use application\forms\FormsMerger;
 use application\models\Items\Category;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class CategoryForm
@@ -63,6 +64,13 @@ class CategoryForm extends FormsMerger
             [['name', 'slug'], 'unique', 'targetClass' => Category::class,
             'filter' => $this->_category ? ['<>', 'id', $this->_category->id] : null]
         ];
+    }
+
+    public function treeListSort() : array
+    {
+        return ArrayHelper::map(Category::find()->orderBy('lft')->asArray()->all(), 'id', function (array $category) {
+            return ($category['depth'] > 1 ? str_repeat('-- ', $category['depth'] - 1) . ' ' : '') . $category['name'];
+        });
     }
 
     /**

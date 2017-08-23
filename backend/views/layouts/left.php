@@ -35,6 +35,7 @@
                     ['label' => 'App', 'icon' => 'folder', 'items' => [
                         ['label' => 'Labels', 'icon' => 'file-o', 'url' => ['/items/label/index'], 'active' => $this->context->id == 'items/label'],
                         ['label' => 'Tags', 'icon' => 'file-o', 'url' => ['/items/tag/index'], 'active' => $this->context->id == 'items/tag'],
+                        ['label' => 'Categories', 'icon' => 'file-o', 'url' => ['/items/category/index'], 'active' => $this->context->id == 'items/category'],
                         ]],
                     ['label' => 'Users', 'icon' => 'user', 'url' => ['/user/index'], 'active' => $this->context->id == 'user'],
                     ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
