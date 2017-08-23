@@ -41,4 +41,13 @@ class ItemRepository
     {
         if (!$item->delete()) throw new \RuntimeException('Deleting fault');
     }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    public function bindedWithLabel($id) : bool
+    {
+        return Item::find()->andWhere(['label_id' => $id])->exists();
+    }
 }

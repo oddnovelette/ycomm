@@ -10,6 +10,7 @@ namespace application\services\Items;
 
 use application\forms\Items\LabelForm;
 use application\models\Items\{Label, Meta};
+use application\repositories\ItemRepository;
 use application\repositories\LabelRepository;
 use yii\helpers\Inflector;
 
@@ -23,14 +24,17 @@ class LabelService
      * @var LabelRepository
      */
     private $labelRepository;
+    private $itemRepository;
 
     /**
      * LabelService constructor.
      * @param LabelRepository $labelRepository
+     * @param ItemRepository $itemRepository
      */
-    public function __construct(LabelRepository $labelRepository)
+    public function __construct(LabelRepository $labelRepository, ItemRepository $itemRepository)
     {
         $this->labelRepository = $labelRepository;
+        $this->itemRepository = $itemRepository;
     }
 
     /**
@@ -71,6 +75,9 @@ class LabelService
     public function remove(int $id) : void
     {
         $label = $this->labelRepository->get($id);
+        if ($this->itemRepository->bindedWithLabel($label->id)) {
+            throw new \DomainException('Cant delete label with items');
+        }
         $this->labelRepository->remove($label);
     }
 }
