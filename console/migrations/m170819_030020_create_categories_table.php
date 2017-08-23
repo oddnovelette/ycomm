@@ -12,8 +12,6 @@ class m170819_030020_create_categories_table extends Migration
      */
     public function up()
     {
-        $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
-
         $this->createTable('{{%item_categories}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
@@ -24,7 +22,7 @@ class m170819_030020_create_categories_table extends Migration
             'lft' => $this->integer()->notNull(),
             'rgt' => $this->integer()->notNull(),
             'depth' => $this->integer()->notNull(),
-        ], $tableOptions);
+        ]);
         
         $this->createIndex('{{%idx-item_categories-slug}}', '{{%item_categories}}', 'slug', true);
     }

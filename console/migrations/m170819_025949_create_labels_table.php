@@ -14,7 +14,7 @@ class m170819_025949_create_labels_table extends Migration
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
             'slug' => $this->string()->notNull(),
-            'meta_json' => 'JSON NOT NULL',
+            'meta_json' => 'JSON NOT NULL', // Be aware with MariaDB
         ], $tableOptions);
         $this->createIndex('{{%idx-labels-slug}}', '{{%item_labels}}', 'slug', true);
     }

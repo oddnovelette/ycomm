@@ -49,7 +49,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user->email = $email;
         $user->setPassword($password);
         $user->created_at = time();
-        $user->status = self::STATUS_AWAIT; // for consideration
+        $user->status = self::STATUS_ACTIVE; // for consideration
         $user->newConfirmToken();
         $user->generateAuthKey();
         return $user;

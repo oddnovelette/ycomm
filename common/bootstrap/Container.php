@@ -7,8 +7,16 @@ use yii\base\BootstrapInterface;
 use yii\di\Instance;
 use yii\mail\MailerInterface;
 
+/**
+ * Class Container
+ * @package common\bootstrap
+ */
 class Container implements BootstrapInterface
 {
+    /**
+     * @param \yii\base\Application $app
+     * @return void
+     */
     public function bootstrap($app) : void
     {
         $container = \Yii::$container;

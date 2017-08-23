@@ -69,7 +69,7 @@ abstract class FormsMerger extends Model
      * @param string $name
      * @return array|mixed|Model
      */
-    public function __get($name) : array
+    public function __get($name)
     {
         if (isset($this->forms[$name])) {
             return $this->forms[$name];
