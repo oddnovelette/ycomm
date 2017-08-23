@@ -76,7 +76,7 @@ class LabelService
     {
         $label = $this->labelRepository->get($id);
         if ($this->itemRepository->bindedWithLabel($label->id)) {
-            throw new \DomainException('Cant delete label with items');
+            throw new \DomainException('Can`t delete label with items');
         }
         $this->labelRepository->remove($label);
     }

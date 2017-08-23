@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'attribute' => 'name',
                         'value' => function (Category $model) {
-                            $indent = ($model->depth > 1 ? str_repeat('&nbsp;&nbsp;', $model->depth - 1) . ' ' : '');
+                            $indent = ($model->depth > 1 ? str_repeat('&nbsp;&nbsp;&#8627;', $model->depth - 1) . ' ' : '');
                             return $indent . Html::a(Html::encode($model->name), ['view', 'id' => $model->id]);
                         },
                         'format' => 'raw',
@@ -35,8 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'value' => function (Category $model) {
                             return
-                                Html::a('<span class="glyphicon glyphicon-arrow-up"></span>', ['move-up', 'id' => $model->id]) .
-                                Html::a('<span class="glyphicon glyphicon-arrow-down"></span>', ['move-down', 'id' => $model->id]);
+                                Html::a('<span class="glyphicon glyphicon-arrow-up"></span>',
+                                    ['move-up', 'id' => $model->id, 'data-method' => 'post']) .
+
+                                Html::a('<span class="glyphicon glyphicon-arrow-down"></span>',
+                                    ['move-down', 'id' => $model->id, 'data-method' => 'post']);
                         },
                         'format' => 'raw',
                         'contentOptions' => ['style' => 'text-align: center'],

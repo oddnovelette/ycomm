@@ -50,4 +50,13 @@ class ItemRepository
     {
         return Item::find()->andWhere(['label_id' => $id])->exists();
     }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    public function bindedWithCategory($id) : bool
+    {
+        return Item::find()->andWhere(['category_id' => $id])->exists();
+    }
 }

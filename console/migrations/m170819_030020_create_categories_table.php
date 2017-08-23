@@ -25,6 +25,18 @@ class m170819_030020_create_categories_table extends Migration
         ]);
         
         $this->createIndex('{{%idx-item_categories-slug}}', '{{%item_categories}}', 'slug', true);
+
+        $this->insert('{{%item_categories}}', [
+            'id' => 1,
+            'name' => '',
+            'slug' => 'root',
+            'title' => null,
+            'description' => null,
+            'meta_json' => '{}',
+            'lft' => 1,
+            'rgt' => 2,
+            'depth' => 0,
+        ]);
     }
 
     /**

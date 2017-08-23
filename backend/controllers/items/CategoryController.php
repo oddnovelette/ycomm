@@ -45,6 +45,8 @@ class CategoryController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'move-up' => ['POST'],
+                    'move-down' => ['POST'],
                 ],
             ],
         ];
@@ -142,5 +144,24 @@ class CategoryController extends Controller
             return $model;
         }
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionMoveUp($id)
+    {
+        $this->service->moveUp($id);
+        return $this->redirect(['index']);
+    }
+    /**
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionMoveDown($id)
+    {
+        $this->service->moveDown($id);
+        return $this->redirect(['index']);
     }
 }

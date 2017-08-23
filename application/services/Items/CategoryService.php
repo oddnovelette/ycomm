@@ -11,6 +11,7 @@ namespace application\services\Items;
 use application\forms\Items\CategoryForm;
 use application\models\Items\{Category, Meta};
 use application\repositories\CategoryRepository;
+use application\repositories\ItemRepository;
 
 /**
  * Class CategoryService
@@ -18,18 +19,18 @@ use application\repositories\CategoryRepository;
  */
 class CategoryService
 {
-    /**
-     * @var CategoryRepository
-     */
     private $categoryRepository;
+    private $itemRepository;
 
     /**
      * CategoryService constructor.
      * @param CategoryRepository $categoryRepository
+     * @param ItemRepository $itemRepository
      */
-    public function __construct(CategoryRepository $categoryRepository)
+    public function __construct(CategoryRepository $categoryRepository, ItemRepository $itemRepository)
     {
         $this->categoryRepository = $categoryRepository;
+        $this->itemRepository = $itemRepository;
     }
 
     /**
@@ -85,6 +86,48 @@ class CategoryService
     {
         $category = $this->categoryRepository->get($id);
         if ($category->isRoot()) throw new \DomainException('Unable to handle the root');
+        if($this->itemRepository->bindedWithCategory($category->id)) {
+            throw new \DomainException('Can`t delete category with items');
+        }
         $this->categoryRepository->remove($category);
+    }
+
+    /**
+     * @param $id
+     * @return void
+     */
+    public function moveUp($id) : void
+    {
+        $category = $this->categoryRepository->get($id);
+        $this->isNotRoot($category);
+        if ($prev = $category->prev) {
+            $category->insertBefore($prev);
+        }
+        $this->categoryRepository->save($category);
+    }
+
+    /**
+     * @param $id
+     * @return void
+     */
+    public function moveDown($id) : void
+    {
+        $category = $this->categoryRepository->get($id);
+        $this->isNotRoot($category);
+        if ($next = $category->next) {
+            $category->insertAfter($next);
+        }
+        $this->categoryRepository->save($category);
+    }
+
+    /**
+     * @param Category $category
+     * @return void
+     */
+    private function isNotRoot(Category $category) : void
+    {
+        if ($category->isRoot()) {
+            throw new \DomainException('Can`t handle root category.');
+        }
     }
 }

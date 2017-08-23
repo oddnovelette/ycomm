@@ -24,7 +24,7 @@ class Meta
      * @param string $description
      * @param string $keywords
      */
-    public function __construct(string $title, string $description, string $keywords)
+    public function __construct($title, $description, $keywords)
     {
         $this->title = $title;
         $this->description = $description;

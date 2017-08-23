@@ -47,14 +47,7 @@ class Category extends ActiveRecord
      * @param Meta $meta
      * @return Category
      */
-    public static function create
-    (
-        string $name,
-        string $slug,
-        string $title,
-        string $description,
-        Meta $meta
-    ) : self
+    public static function create($name, $slug, $title, $description, Meta $meta) : self
     {
         $category = new self();
         $category->name = $name;
