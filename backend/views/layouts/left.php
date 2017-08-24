@@ -36,6 +36,7 @@
                         ['label' => 'Labels', 'icon' => 'file-o', 'url' => ['/items/label/index'], 'active' => $this->context->id == 'items/label'],
                         ['label' => 'Tags', 'icon' => 'file-o', 'url' => ['/items/tag/index'], 'active' => $this->context->id == 'items/tag'],
                         ['label' => 'Categories', 'icon' => 'file-o', 'url' => ['/items/category/index'], 'active' => $this->context->id == 'items/category'],
+                        ['label' => 'Parameters', 'icon' => 'file-o', 'url' => ['/items/parameter/index'], 'active' => $this->context->id == 'items/parameter'],
                         ]],
                     ['label' => 'Users', 'icon' => 'user', 'url' => ['/user/index'], 'active' => $this->context->id == 'user'],
                     ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],

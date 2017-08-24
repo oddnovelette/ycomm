@@ -35,11 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'value' => function (Category $model) {
                             return
-                                Html::a('<span class="glyphicon glyphicon-arrow-up"></span>',
-                                    ['move-up', 'id' => $model->id, 'data-method' => 'post']) .
-
-                                Html::a('<span class="glyphicon glyphicon-arrow-down"></span>',
-                                    ['move-down', 'id' => $model->id, 'data-method' => 'post']);
+                                Html::a('<span class="glyphicon glyphicon-arrow-up"></span>', ['move-up', 'id' => $model->id]) .
+                                Html::a('<span class="glyphicon glyphicon-arrow-down"></span>', ['move-down', 'id' => $model->id]);
                         },
                         'format' => 'raw',
                         'contentOptions' => ['style' => 'text-align: center'],

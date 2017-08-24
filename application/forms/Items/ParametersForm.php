@@ -9,6 +9,7 @@
 namespace application\forms\Items;
 
 use application\models\Items\Parameter;
+use backend\forms\ParamHelper;
 use yii\base\Model;
 
 /**
@@ -58,6 +59,11 @@ class ParametersForm extends Model
             [['name'], 'unique', 'targetClass' => Parameter::class,
             'filter' => $this->_parameter ? ['<>', 'id', $this->_parameter->id] : null]
         ];
+    }
+
+    public function typeList() : array
+    {
+        return ParamHelper::typeList();
     }
 
     public function getVariants() : array

@@ -3,36 +3,36 @@
  * Created by PhpStorm.
  * User: odd
  * Date: 23.08.2017
- * Time: 06:21
+ * Time: 17:43
  */
 
 namespace backend\controllers\items;
 
-use application\forms\Items\CategoryForm;
-use application\models\Items\Category;
-use application\services\Items\CategoryService;
-use backend\forms\CategorySearch;
+use application\forms\Items\ParametersForm;
+use application\models\Items\Parameter;
+use application\services\Items\ParameterService;
+use backend\forms\ParameterSearch;
 use yii\base\Module;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * Class CategoryController
+ * Class ParameterController
  * @package controllers\items
  */
-class CategoryController extends Controller
+class ParameterController extends Controller
 {
     private $service;
 
     /**
-     * CategoryController constructor.
+     * ParameterController constructor.
      * @param string $id
      * @param Module $module
-     * @param CategoryService $service
+     * @param ParameterService $service
      * @param array|null $config
      */
-    public function __construct(string $id, Module $module, CategoryService $service, array $config = null)
+    public function __construct(string $id, Module $module, ParameterService $service, array $config = null)
     {
         parent::__construct($id, $module, $config);
         $this->service = $service;
@@ -44,7 +44,7 @@ class CategoryController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST']
+                    'delete' => ['POST'],
                 ],
             ],
         ];
@@ -55,14 +55,13 @@ class CategoryController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new CategorySearch();
+        $searchModel = new ParameterSearch();
         $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
-
     /**
      * @param integer $id
      * @return mixed
@@ -70,7 +69,7 @@ class CategoryController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'category' => $this->findModel($id),
+            'parameter' => $this->findModel($id),
         ]);
     }
     /**
@@ -78,12 +77,11 @@ class CategoryController extends Controller
      */
     public function actionCreate()
     {
-        $form = new CategoryForm();
+        $form = new ParametersForm();
         if ($form->load(\Yii::$app->request->post()) && $form->validate()) {
             try {
-                $category = $this->service->create($form);
-                \Yii::$app->session->setFlash('success', 'Successfully created');
-                return $this->redirect(['view', 'id' => $category->id]);
+                $characteristic = $this->service->create($form);
+                return $this->redirect(['view', 'id' => $characteristic->id]);
             } catch (\DomainException $e) {
                 \Yii::$app->errorHandler->logException($e);
                 \Yii::$app->session->setFlash('error', $e->getMessage());
@@ -91,20 +89,18 @@ class CategoryController extends Controller
         }
         return $this->render('create', ['model' => $form]);
     }
-
     /**
      * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
     {
-        $category = $this->findModel($id);
-        $form = new CategoryForm($category);
+        $parameter = $this->findModel($id);
+        $form = new ParametersForm($parameter);
         if ($form->load(\Yii::$app->request->post()) && $form->validate()) {
             try {
-                $this->service->edit($category->id, $form);
-                \Yii::$app->session->setFlash('success', 'Successfully updated');
-                return $this->redirect(['view', 'id' => $category->id]);
+                $this->service->edit($parameter->id, $form);
+                return $this->redirect(['view', 'id' => $parameter->id]);
             } catch (\DomainException $e) {
                 \Yii::$app->errorHandler->logException($e);
                 \Yii::$app->session->setFlash('error', $e->getMessage());
@@ -112,7 +108,7 @@ class CategoryController extends Controller
         }
         return $this->render('update', [
             'model' => $form,
-            'category' => $category,
+            'parameter' => $parameter,
         ]);
     }
     /**
@@ -127,39 +123,18 @@ class CategoryController extends Controller
             \Yii::$app->errorHandler->logException($e);
             \Yii::$app->session->setFlash('error', $e->getMessage());
         }
-        \Yii::$app->session->setFlash('info', 'Successfully deleted');
         return $this->redirect(['index']);
     }
-
     /**
      * @param integer $id
-     * @return Category the loaded model
+     * @return Parameter, the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) : Category
+    protected function findModel($id) : Parameter
     {
-        if (($model = Category::findOne($id)) !== null) {
+        if (($model = Parameter::findOne($id)) !== null) {
             return $model;
         }
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    /**
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionMoveUp($id)
-    {
-        $this->service->moveUp($id);
-        return $this->redirect(['index']);
-    }
-    /**
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionMoveDown($id)
-    {
-        $this->service->moveDown($id);
-        return $this->redirect(['index']);
     }
 }
