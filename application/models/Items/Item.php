@@ -31,6 +31,7 @@ use yii\web\UploadedFile;
  * @property CategoryAttachment[] $categoryAttachments
  * @property TagAttachment[] $tagAttachments
  * @property RelatedAttachment[] $relatedAttachments
+ * @property Variation[] $variations
  * @property ParameterValue[] $values
  * @property Image[] $images
  * @property Overwiev[] $overviews
@@ -285,9 +286,85 @@ class Item extends ActiveRecord
         throw new \DomainException('Attachment not found.');
     }
 
+    // Variations handlers
 
-    // Overviews handling part
+    /**
+     * @param $id
+     * @return Variation
+     */
+    public function getVariation($id) : Variation
+    {
+        foreach ($this->variations as $variation) {
+            if ($variation->isIdEqualTo($id)) {
+                return $variation;
+            }
+        }
+        throw new \DomainException('Variation not found.');
+    }
 
+    /**
+     * @param $code
+     * @param $name
+     * @param $price
+     */
+    public function addVariation($code, $name, $price) : void
+    {
+        $variations = $this->variations;
+        foreach ($variations as $variation) {
+            if ($variation->isCodeEqualTo($code)) {
+                throw new \DomainException('Variation already exists.');
+            }
+        }
+        $variations[] = Variation::create($code, $name, $price);
+        $this->variations = $variations;
+    }
+
+    /**
+     * @param $id
+     * @param $code
+     * @param $name
+     * @param $price
+     * @return void
+     */
+    public function editVariation($id, $code, $name, $price) : void
+    {
+        $variations = $this->variations;
+        foreach ($variations as $i => $variation) {
+            if ($variation->isIdEqualTo($id)) {
+                $variation->edit($code, $name, $price);
+                $this->variations = $variations;
+                return;
+            }
+        }
+        throw new \DomainException('Variation not found.');
+    }
+
+    /**
+     * @param $id
+     * @return void
+     */
+    public function removeVariation($id) : void
+    {
+        $variations = $this->variations;
+        foreach ($variations as $i => $variation) {
+            if ($variation->isIdEqualTo($id)) {
+                unset($variations[$i]);
+                $this->variations = $variations;
+                return;
+            }
+        }
+        throw new \DomainException('Variation not found.');
+    }
+
+
+    // Overviews handlers
+
+    /**
+     * @param $userId
+     * @param $vote
+     * @param $text
+     * @return void
+     */
     public function addOverview($userId, $vote, $text) : void
     {
         $overviews = $this->overviews;
@@ -295,6 +372,12 @@ class Item extends ActiveRecord
         $this->updateOverviews($overviews);
     }
 
+    /**
+     * @param $id
+     * @param $vote
+     * @param $text
+     * @return void
+     */
     public function editOverview($id, $vote, $text) : void
     {
         $overviews = $this->overviews;
@@ -404,6 +487,10 @@ class Item extends ActiveRecord
     {
         return $this->hasOne(Image::class, ['id' => 'main_image_id']);
     }
+    public function getVariations() : ActiveQuery
+    {
+      return $this->hasMany(Variation::class, ['item_id' => 'id']);
+    }
     #######################################################
 
     public static function tableName() : string
@@ -416,7 +503,15 @@ class Item extends ActiveRecord
         return [
             [
                 'class' => SaveRelationsBehavior::className(),
-                'relations' => ['categoryAttachments', 'tagAttachments', 'relatedAttachments', 'values', 'images', 'overviews'],
+                'relations' => [
+                    'categoryAttachments',
+                    'tagAttachments',
+                    'relatedAttachments',
+                    'variations',
+                    'values',
+                    'images',
+                    'overviews'
+                ],
             ],
         ];
     }

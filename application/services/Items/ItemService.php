@@ -13,6 +13,7 @@ use application\models\Items\{Item, Tag, Meta};
 use application\forms\Items\{
     ItemEditForm,
     ItemCreateForm,
+    VariationForm,
     ImageForm
 };
 use application\repositories\{
@@ -142,6 +143,52 @@ class ItemService
             }
             $this->itemRepository->save($item);
         });
+    }
+
+    /**
+     * @param $id
+     * @param VariationForm $form
+     * @return void
+     */
+    public function addVariation($id, VariationForm $form) : void
+    {
+        $item = $this->itemRepository->get($id);
+        $item->addVariation(
+            $form->code,
+            $form->name,
+            $form->price
+        );
+        $this->itemRepository->save($item);
+    }
+
+    /**
+     * @param $id
+     * @param $variationId
+     * @param VariationForm $form
+     * @return void
+     */
+    public function editVariation($id, $variationId, VariationForm $form) : void
+    {
+        $item = $this->itemRepository->get($id);
+        $item->editVariation(
+            $variationId,
+            $form->code,
+            $form->name,
+            $form->price
+        );
+        $this->itemRepository->save($item);
+    }
+
+    /**
+     * @param $id
+     * @param $variationId
+     * @return void
+     */
+    public function removeVariation($id, $variationId) : void
+    {
+        $item = $this->itemRepository->get($id);
+        $item->removeVariation($variationId);
+        $this->itemRepository->save($item);
     }
 
     /**
