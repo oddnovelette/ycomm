@@ -7,4 +7,6 @@ return [
     'cookieDomain' => '.example.com',
     'frontHost' => 'http://example.com',
     'backHost' => 'http://backend.example.com',
+    'uploadHost' => 'http://uploads.example.com',
+    'uploadPath' => dirname(__DIR__, 2) . '/uploads',
 ];

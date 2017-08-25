@@ -22,6 +22,7 @@ class ItemCreateForm extends FormsMerger
     public $labelId;
     public $code;
     public $name;
+    public $text;
 
     /**
      * ItemCreateForm constructor.
@@ -48,6 +49,7 @@ class ItemCreateForm extends FormsMerger
             [['code', 'name'], 'string', 'max' => 255],
             [['labelId'], 'integer'],
             [['code'], 'unique', 'targetClass' => Item::class],
+            ['text', 'string'],
         ];
     }
 

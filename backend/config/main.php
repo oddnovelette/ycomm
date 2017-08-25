@@ -9,6 +9,10 @@ $params = array_merge(
 return [
     'id' => 'application-backend',
     'basePath' => dirname(__DIR__),
+    'aliases' => [
+        '@uploadRoot' => $params['uploadPath'],
+        '@upload' => $params['uploadHost'],
+    ],
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => [
         'log',

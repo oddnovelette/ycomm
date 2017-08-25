@@ -18,6 +18,7 @@ use yii\web\UploadedFile;
  * @property integer $created_at
  * @property string $code
  * @property string $name
+ * @property string $text
  * @property integer $category_id
  * @property integer $label_id
  * @property integer $price_old
@@ -47,16 +48,18 @@ class Item extends ActiveRecord
      * @param int $categoryId
      * @param string $code
      * @param string $name
+     * @param string $text
      * @param Meta $meta
      * @return Item
      */
-    public static function create(int $labelId, int $categoryId, string $code, string $name, Meta $meta) : self
+    public static function create(int $labelId, int $categoryId, string $code, string $name, string $text, Meta $meta) : self
     {
         $item = new self();
         $item->label_id = $labelId;
         $item->category_id = $categoryId;
         $item->code = $code;
         $item->name = $name;
+        $item->text = $text;
         $item->meta = $meta;
         $item->created_at = time();
         return $item;
@@ -77,13 +80,15 @@ class Item extends ActiveRecord
      * @param int $labelId
      * @param string $code
      * @param string $name
+     * @param string $text
      * @param Meta $meta
      */
-    public function edit(int $labelId, string $code, string $name, Meta $meta) : void
+    public function edit(int $labelId, string $code, string $name, string $text, Meta $meta) : void
     {
         $this->label_id = $labelId;
         $this->code = $code;
         $this->name = $name;
+        $this->text = $text;
         $this->meta = $meta;
     }
 
@@ -250,6 +255,7 @@ class Item extends ActiveRecord
             $image->setSort($i);
         }
         $this->images = $images;
+        $this->populateRelation('mainImage', reset($photos));
     }
 
     // Related items methods
@@ -394,6 +400,10 @@ class Item extends ActiveRecord
     {
         return $this->hasMany(Overwiev::class, ['item_id' => 'id']);
     }
+    public function getMainImage() : ActiveQuery
+    {
+        return $this->hasOne(Image::class, ['id' => 'main_image_id']);
+    }
     #######################################################
 
     public static function tableName() : string
@@ -441,5 +451,18 @@ class Item extends ActiveRecord
         return [
             self::SCENARIO_DEFAULT => self::OP_ALL,
         ];
+    }
+
+    /**
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes) : void
+    {
+         $related = $this->getRelatedRecords();
+         if (array_key_exists('mainImage', $related)) {
+             $this->updateAttributes(['main_image_id' => $related['mainImage'] ? $related['mainImage']->id : null]);
+         }
+         parent::afterSave($insert, $changedAttributes);
     }
 }

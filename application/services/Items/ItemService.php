@@ -13,7 +13,6 @@ use application\models\Items\{Item, Tag, Meta};
 use application\forms\Items\{
     ItemEditForm,
     ItemCreateForm,
-    CategoriesForm,
     ImageForm
 };
 use application\repositories\{
@@ -65,8 +64,7 @@ class ItemService
         $label = $this->labelRepository->get($form->labelId);
         $category = $this->categoryRepository->get($form->categories->main);
 
-        $item = Item::create($label->id, $category->id, $form->code, $form->name,
-
+        $item = Item::create($label->id, $category->id, $form->code, $form->name, $form->text,
             new Meta($form->meta->title, $form->meta->description, $form->meta->keywords)
         );
         $item->setPrice($form->price->new, $form->price->old);
@@ -110,13 +108,24 @@ class ItemService
     {
         $item = $this->itemRepository->get($id);
         $label = $this->labelRepository->get($form->labelId);
+        $category = $this->categoryRepository->get($form->categories->main);
 
-        $item->edit($label->id, $form->code, $form->name,
+        $item->edit($label->id, $form->code, $form->name, $form->text,
             new Meta($form->meta->title, $form->meta->description, $form->meta->keywords)
         );
+
+        $item->changeMainCategory($category->id);
+        $item->detachItemCategories();
+
+        foreach ($form->categories->others as $otherId) {
+            $category = $this->categoryRepository->get($otherId);
+            $item->attachCategory($category->id);
+        }
+
         foreach ($form->values as $value) {
             $item->setParameterValue($value->id, $value->value);
         }
+
         $item->detachItemTags();
         foreach ($form->tags->existing as $tagId) {
             $tag = $this->tagRepository->get($tagId);
@@ -133,24 +142,6 @@ class ItemService
             }
             $this->itemRepository->save($item);
         });
-    }
-
-    /**
-     * @param int $id
-     * @param CategoriesForm $form
-     * @return void
-     */
-    public function changeCategories(int $id, CategoriesForm $form) : void
-    {
-        $item = $this->itemRepository->get($id);
-        $category = $this->categoryRepository->get($form->main);
-        $item->changeMainCategory($category->id);
-        $item->detachItemCategories();
-        foreach ($form->others as $otherId) {
-            $category = $this->categoryRepository->get($otherId);
-            $item->attachCategory($category->id);
-        }
-        $this->itemRepository->save($item);
     }
 
     /**

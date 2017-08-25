@@ -20,6 +20,7 @@ class ItemEditForm extends FormsMerger
     public $labelId;
     public $code;
     public $name;
+    public $text;
 
     private $_item;
 
@@ -33,7 +34,9 @@ class ItemEditForm extends FormsMerger
         $this->labelId = $item->label_id;
         $this->code = $item->code;
         $this->name = $item->name;
+        $this->text = $item->text;
         $this->meta = new MetatagsForm($item->meta);
+        $this->categories = new CategoriesForm($item);
         $this->tags = new TagsForm($item);
         $this->values = array_map(
             function (Parameter $parameter) use ($item) {
@@ -55,6 +58,7 @@ class ItemEditForm extends FormsMerger
             [['code', 'name'], 'string', 'max' => 255],
             [['code'], 'unique', 'targetClass' => Item::class,
             'filter' => $this->_item ? ['<>', 'id', $this->_item->id] : null],
+            ['text', 'string'],
         ];
     }
 
