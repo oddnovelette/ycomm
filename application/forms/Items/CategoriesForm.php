@@ -8,7 +8,8 @@
 
 namespace application\forms\Items;
 
-use application\models\Items\Item;
+use application\models\Items\{Category, Item};
+
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
@@ -19,7 +20,7 @@ use yii\helpers\ArrayHelper;
 class CategoriesForm extends Model
 {
     public $main;
-    public $others = [];
+    public $others = array();
 
     /**
      * CategoriesForm constructor.
@@ -47,4 +48,14 @@ class CategoriesForm extends Model
             ['others', 'default', 'value' => []],
         ];
     }
+
+    public function categoriesList() : array
+     {
+         return ArrayHelper::map(Category::find()
+             ->andWhere(['>', 'depth', 0])
+             ->orderBy('lft')->asArray()
+             ->all(), 'id', function (array $category) {
+             return ($category['depth'] > 1 ? str_repeat('-- ', $category['depth'] - 1) . ' ' : '') . $category['name'];
+         });
+     }
 }

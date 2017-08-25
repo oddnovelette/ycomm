@@ -8,7 +8,7 @@
 
 namespace application\forms\Items;
 
-use application\models\Items\Item;
+use application\models\Items\{Item, Tag};
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
@@ -18,7 +18,7 @@ use yii\helpers\ArrayHelper;
  */
 class TagsForm extends Model
 {
-    public $existing = [];
+    public $existing = array();
     public $textNew;
 
     /**
@@ -41,6 +41,11 @@ class TagsForm extends Model
             ['existing', 'default', 'value' => []],
             ['textNew', 'string'],
         ];
+    }
+
+    public function tagsList() : array
+    {
+        return ArrayHelper::map(Tag::find()->orderBy('name')->asArray()->all(), 'id', 'name');
     }
 
     public function getNewNames() : array

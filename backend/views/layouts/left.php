@@ -33,6 +33,7 @@
 
                     ['label' => 'Control panel', 'options' => ['class' => 'header']],
                     ['label' => 'App', 'icon' => 'folder', 'items' => [
+                        ['label' => 'Items', 'icon' => 'file-o', 'url' => ['/items/item/index'], 'active' => $this->context->id == 'items/item'],
                         ['label' => 'Labels', 'icon' => 'file-o', 'url' => ['/items/label/index'], 'active' => $this->context->id == 'items/label'],
                         ['label' => 'Tags', 'icon' => 'file-o', 'url' => ['/items/tag/index'], 'active' => $this->context->id == 'items/tag'],
                         ['label' => 'Categories', 'icon' => 'file-o', 'url' => ['/items/category/index'], 'active' => $this->context->id == 'items/category'],

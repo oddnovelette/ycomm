@@ -13,6 +13,7 @@ use application\models\Items\{Item, Tag, Meta};
 use application\forms\Items\{
     ItemEditForm,
     ItemCreateForm,
+    PriceForm,
     VariationForm,
     ImageForm
 };
@@ -238,6 +239,18 @@ class ItemService
     {
         $item = $this->itemRepository->get($id);
         $item->deleteImage($photoId);
+        $this->itemRepository->save($item);
+    }
+
+    /**
+     * @param $id
+     * @param PriceForm $form
+     * @return void
+     */
+    public function changePrice($id, PriceForm $form) : void
+    {
+        $item = $this->itemRepository->get($id);
+        $item->setPrice($form->new, $form->old);
         $this->itemRepository->save($item);
     }
 

@@ -9,7 +9,13 @@
 namespace application\forms\Items;
 
 use application\forms\{FormsMerger, MetatagsForm};
-use application\models\Items\{Item, Parameter};
+
+use application\models\Items\{
+    Item,
+    Label,
+    Parameter
+};
+use yii\helpers\ArrayHelper;
 
 /**
  * Class ItemEditForm
@@ -65,8 +71,16 @@ class ItemEditForm extends FormsMerger
     /**
      * @return array
      */
+   public function labelsList() : array
+   {
+       return ArrayHelper::map(Label::find()->orderBy('name')->asArray()->all(), 'id', 'name');
+   }
+
+    /**
+     * @return array
+     */
     protected function internalForms() : array
     {
-        return ['meta', 'tags', 'values'];
+        return ['meta', 'categories', 'tags', 'values'];
     }
 }

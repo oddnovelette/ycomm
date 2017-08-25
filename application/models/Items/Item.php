@@ -41,6 +41,8 @@ use yii\web\UploadedFile;
  */
 class Item extends ActiveRecord
 {
+    const STATUS_DRAFT = 0;
+    const STATUS_ACTIVE = 1;
 
     public $meta;
 
@@ -459,9 +461,17 @@ class Item extends ActiveRecord
     {
         return $this->hasOne(Category::class, ['id' => 'category_id']);
     }
+    public function getCategories() : ActiveQuery
+    {
+        return $this->hasMany(Category::class, ['id' => 'category_id'])->via('categoryAttachments');
+    }
     public function getCategoryAttachments() : ActiveQuery
     {
         return $this->hasMany(CategoryAttachment::class, ['item_id' => 'id']);
+    }
+    public function getTags() : ActiveQuery
+    {
+        return $this->hasMany(Tag::class, ['id' => 'tag_id'])->via('tagAttachments');
     }
     public function getTagAttachments() : ActiveQuery
     {
@@ -474,6 +484,10 @@ class Item extends ActiveRecord
     public function getImages() : ActiveQuery
     {
         return $this->hasMany(Image::class, ['item_id' => 'id'])->orderBy('sort');
+    }
+    public function getRelateds() : ActiveQuery
+    {
+        return $this->hasMany(Item::class, ['id' => 'related_id'])->via('relatedAttachments');
     }
     public function getRelatedAttachments() : ActiveQuery
     {
@@ -530,6 +544,20 @@ class Item extends ActiveRecord
         return parent::beforeSave($insert);
     }
 
+    /**
+     * @return bool
+     */
+    public function beforeDelete() : bool
+    {
+        if (parent::beforeDelete()) {
+            foreach ($this->images as $image) {
+                $image->delete();
+            }
+            return true;
+        }
+        return false;
+    }
+
     public function afterFind() : void
     {
         $meta = Json::decode($this->getAttribute('meta_json'));
@@ -556,7 +584,11 @@ class Item extends ActiveRecord
     {
          $related = $this->getRelatedRecords();
          if (array_key_exists('mainImage', $related)) {
-             $this->updateAttributes(['main_image_id' => $related['mainImage'] ? $related['mainImage']->id : null]);
+             $this->updateAttributes([
+                 'main_image_id' => $related['mainImage']
+                 ? $related['mainImage']->id
+                 : null
+             ]);
          }
          parent::afterSave($insert, $changedAttributes);
     }

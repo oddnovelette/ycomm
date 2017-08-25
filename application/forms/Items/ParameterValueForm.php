@@ -48,6 +48,13 @@ class ParameterValueForm extends Model
         ];
     }
 
+    public function variantsList() : ? array
+    {
+       return $this->_parameter->variants
+           ? array_combine($this->_parameter->variants, $this->_parameter->variants)
+           : null;
+    }
+
     public function getId() : int
     {
         return $this->_parameter->id;

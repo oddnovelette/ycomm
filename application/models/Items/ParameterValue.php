@@ -8,6 +8,7 @@
 
 namespace application\models\Items;
 
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -18,7 +19,7 @@ class ParameterValue extends ActiveRecord
 {
     public static function tableName() : string
     {
-        return '{{%item_parameter_values}}';
+        return '{{%item_values}}';
     }
 
     /**
@@ -50,6 +51,14 @@ class ParameterValue extends ActiveRecord
     public function isForParameter(int $id) : bool
     {
         return $this->parameter_id == $id;
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getParameters() : ActiveQuery
+    {
+        return $this->hasOne(Parameter::class, ['id' => 'parameter_id']);
     }
 
 }
