@@ -121,5 +121,5 @@ a.desc:after {
 
 div.required label.control-label:after {
     content: " *";
-    color: darkblue;
+    color: #cc5555;
 }

@@ -44,6 +44,6 @@ class TagAttachment extends ActiveRecord
      */
     public static function tableName() : string
     {
-        return '{{%iem_tag_attachments}}';
+        return '{{%item_tag_attachments}}';
     }
 }

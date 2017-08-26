@@ -22,7 +22,7 @@ class Overwiev extends ActiveRecord
      * @param string $text
      * @return Overwiev
      */
-    public static function create($userId, int $vote, string $text): self
+    public static function create($userId, int $vote, string $text) : self
     {
         $review = new static();
         $review->user_id = $userId;

@@ -46,7 +46,7 @@ class Image extends ActiveRecord
 
     public static function tableName() : string
     {
-        return '{{%app_images}}';
+        return '{{%item_images}}';
     }
 
     public function behaviors() : array

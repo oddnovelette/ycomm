@@ -220,25 +220,25 @@ class ItemService
 
     /**
      * @param int $id
-     * @param int $photoId
+     * @param int $imageId
      * @return void
      */
-    public function moveImageDown(int $id, int $photoId) : void
+    public function moveImageDown(int $id, int $imageId) : void
     {
         $item = $this->itemRepository->get($id);
-        $item->moveImageDown($photoId);
+        $item->moveImageDown($imageId);
         $this->itemRepository->save($item);
     }
 
     /**
      * @param int $id
-     * @param int $photoId
+     * @param int $imageId
      * @return void
      */
-    public function deleteImage(int $id, int $photoId) : void
+    public function deleteImage(int $id, int $imageId) : void
     {
         $item = $this->itemRepository->get($id);
-        $item->deleteImage($photoId);
+        $item->deleteImage($imageId);
         $this->itemRepository->save($item);
     }
 

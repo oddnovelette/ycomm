@@ -56,7 +56,7 @@ class ParameterValue extends ActiveRecord
     /**
      * @return ActiveQuery
      */
-    public function getParameters() : ActiveQuery
+    public function getParameter() : ActiveQuery
     {
         return $this->hasOne(Parameter::class, ['id' => 'parameter_id']);
     }

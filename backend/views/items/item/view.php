@@ -2,7 +2,6 @@
 
 use kartik\file\FileInput;
 use application\models\Items\ParameterValue;
-use backend\forms\ItemHelper;
 use yii\bootstrap\ActiveForm;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
@@ -41,11 +40,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'model' => $item,
                         'attributes' => [
                             'id',
-                            [
-                                'attribute' => 'status',
-                                'value' => ItemHelper::statusLabel($item->status),
-                                'format' => 'raw',
-                            ],
                             [
                                 'attribute' => 'label_id',
                                 'value' => ArrayHelper::getValue($item, 'label.name'),
@@ -163,8 +157,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-body">
 
             <div class="row">
-                <?php foreach ($item->photos as $image): ?>
-                    <div class="col-md-2 col-xs-3" style="text-align: center">
+                <?php foreach ($item->images as $image): ?>
+                    <div class="col-md-2 col-xs-3" style="text-align: center;">
                         <div class="btn-group">
                             <?= Html::a('<span class="glyphicon glyphicon-arrow-left"></span>', ['move-image-up', 'id' => $item->id, 'image_id' => $image->id], [
                                 'class' => 'btn btn-default',
@@ -175,11 +169,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'data-method' => 'post',
                                 'data-confirm' => 'Remove image?',
                             ]); ?>
-                            <?= Html::a('<span class="glyphicon glyphicon-arrow-right"></span>', ['move-image-down', 'id' => $item->id, 'photo_id' => $image->id], [
+                            <?= Html::a('<span class="glyphicon glyphicon-arrow-right"></span>', ['move-image-down', 'id' => $item->id, 'image_id' => $image->id], [
                                 'class' => 'btn btn-default',
                                 'data-method' => 'post',
                             ]); ?>
                         </div>
+                        <div>
+                            <?= Html::a(
+                                Html::img($image->getThumbFileUrl('file', 'thumb')),
+                                $image->getUploadedFileUrl('file'),
+                                ['class' => 'thumbnail', 'target' => '_blank']
+                            ) ?>
+                        </div>
+                    </div>
                 <?php endforeach; ?>
             </div>
 

@@ -69,11 +69,11 @@ class Item extends ActiveRecord
     }
 
     /**
-     * @param int $new
-     * @param int $old
+     * @param string $new
+     * @param string $old
      * @return void
      */
-    public function setPrice(int $new, int $old) : void
+    public function setPrice(string $new, string $old) : void
     {
         $this->price_new = $new;
         $this->price_old = $old;
@@ -121,9 +121,9 @@ class Item extends ActiveRecord
     public function getParameterValue($id) : ParameterValue
     {
         $parameterValues = $this->values;
-        foreach ($parameterValues as $val) {
-            if ($val->isForParameter($id)) {
-                return $val;
+        foreach ($parameterValues as $value) {
+            if ($value->isForParameter($id)) {
+                return $value;
             }
         }
         return ParameterValue::create($id, null);
@@ -258,7 +258,7 @@ class Item extends ActiveRecord
             $image->setSort($i);
         }
         $this->images = $images;
-        $this->populateRelation('mainImage', reset($photos));
+        $this->populateRelation('mainImage', reset($images));
     }
 
     // Related items methods
@@ -477,7 +477,7 @@ class Item extends ActiveRecord
     {
         return $this->hasMany(TagAttachment::class, ['item_id' => 'id']);
     }
-    public function getParameterValues() : ActiveQuery
+    public function getValues() : ActiveQuery
     {
         return $this->hasMany(ParameterValue::class, ['item_id' => 'id']);
     }
